@@ -29,7 +29,7 @@ profissao VARCHAR(20),
 renda DECIMAL(8,2),
 corretor_creci INT(8),
 FOREIGN KEY(cliente_cpf) REFERENCES cliente(cpf),
-FOREIGN KEY(ccorretor_creci) REFERENCES corretor(creci)
+FOREIGN KEY(corretor_creci) REFERENCES corretor(creci)
 );
 
 CREATE TABLE fiador
