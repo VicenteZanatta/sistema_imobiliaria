@@ -143,8 +143,8 @@ INSERT INTO visita (data, cliente_cpf, corretor_creci) VALUES
 
 -- Inserir dados na tabela contrato
 INSERT INTO contrato (proprietario_cpf, inquilino_cpf, imovel_id, valor, validade) VALUES
-(12345678901, 11122233344, 1, 2400, '2024-01-20'),
-(98765432100, 22233344455, 2, 2900, '2024-01-25');
+(12345678901, 11122233344, 1, 2400, '2022-01-20', '2024-01-20'),
+(98765432100, 22233344455, 2, 2900, '2022-01-25', '2024-01-25');
 
 -- Inserir mais clientes
 INSERT INTO cliente (cpf, nome, estado_civil, telefone) VALUES
