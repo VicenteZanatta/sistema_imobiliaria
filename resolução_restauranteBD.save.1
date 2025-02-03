@@ -1,0 +1,96 @@
+CREAT TABLE Cliente
+(
+idCliente int primary key,
+nomeCliente varchar(50),
+telefone int,
+); 
+
+CREAT TABLE Pedido
+(
+idPedido int PRIMARY KEY NOT NULL,
+dataPedido DATE NOT NULL,
+motivoCancelamente varchar(200),
+situação varcahr(50),
+FOREINGN KEY(idCliente) REFERENCES Cliente (idCliente),
+FIREING KEY(
+
+
+CREATE TABLE Mesa
+(
+CREATE TABLE Mesa (
+    idMesa INT PRIMARY KEY AUTO_INCREMENT,
+    numeroMesas INT NOT NULL
+);
+
+-- Tabela Pedido
+CREATE TABLE Pedido (
+    idPedido INT PRIMARY KEY AUTO_INCREMENT,
+    idCliente INT NOT NULL,
+    idMesa INT NOT NULL,
+    dtPedido DATETIME NOT NULL,
+    motivoCancel TEXT,
+    situacao VARCHAR(20) NOT NULL,
+    FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente),
+    FOREIGN KEY (idMesa) REFERENCES Mesa(idMesa)
+);
+
+-- Tabela Nota (ajustada com chave primária composta)
+CREATE TABLE Nota (
+    numeroNota INT NOT NULL,
+    idPedido INT NOT NULL,
+    dtPagamento DATETIME NOT NULL,
+    PRIMARY KEY (numeroNota, dtPagamento),
+    FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido)
+);
+
+
+- Tabela Item_Consumo
+CREATE TABLE Item_Consumo (
+    idItem INT PRIMARY KEY AUTO_INCREMENT,
+    nomeItem VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    categoria VARCHAR(50),
+    precoUnit DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabela de Associação: Contém (Pedido - Item_Consumo)
+CREATE TABLE Pedido_Item (
+    idPedido INT NOT NULL,
+    idItem INT NOT NULL,
+    quantidade INT NOT NULL,
+    PRIMARY KEY (idPedido, idItem),
+    FOREIGN KEY (idPedido) REFERENCES Pedido(idPedido),
+    FOREIGN KEY (idItem) REFERENCES Item_Consumo(idItem)
+);
+
+
+
+
+1)
+SELECT *
+FROM Pedido
+WHERE idCliente = 1;
+
+2)
+SELECT PI.idItem 
+FROM Pedido_Item as PI JOIN Pedido as P 
+ON PI.idPedido = P.idPedido 
+WHERE P.idCliente = 5;
+
+
+3)
+SELECT pi.idItem, MAX(i.precoUnit)
+FROM Pedido AS p
+JOIN Pedido_Item AS pi ON p.idPedido = pi.idPedido
+JOIN Item_Consumo AS i ON pi.idItem = i.idItem
+WHERE p.idCliente = 1
+
+
+
+
+
+
+
+
+
+
