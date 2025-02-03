@@ -217,14 +217,67 @@ def listar_todos_clientes_com_proposta():
 
 def listar_propostas_por_imovel():
     
-    imovel_id = input("ID IMOVEL:")
+    imovel_id = int(input("ID IMOVEL: "))
     
+    if not confirmacao():
+        return
+
     cursor.execute(
         '''SELECT * 
            FROM proposta p
            WHERE p.imovel_id = %s''', 
         (imovel_id,)
     )
+    resultados = cursor.fetchall()
+    imprimir_resultados(resultados)
+
+def listar_imovel_proprietario():
+    
+    proprietario = int(input("CPF Proprietario: "))
+
+    if not confirmacao():
+        return
+    
+    cursor.execute(
+        '''SELECT idImovel
+            FROM imovel
+            WHERE proprietario_cpf = %s''', 
+        (proprietario,)
+    )
+    resultados = cursor.fetchall()
+    imprimir_resultados(resultados)
+
+def listar_fiadores_inquilino():
+    
+    inquilino = input("CPF Inquilino:")
+
+    if not confirmacao():
+        return
+    
+    cursor.execute(
+        '''SELECT *
+            FROM fiador
+            WHERE inquilino_cpf = %s''', 
+        (inquilino,)
+    )
+    resultados = cursor.fetchall()
+    imprimir_resultados(resultados)
+
+def propostas_vencendo():
+    cursor.execute('''SELECT * 
+                        FROM proposta
+                        WHERE day(now()) - day(validade) 
+                        AND month(now()) = month(validade)
+                        AND year(now()) = year(validade);''') # função now() retorna data atual 
+
+    resultados = cursor.fetchall()
+    imprimir_resultados(resultados)
+
+def listar_imoveis_corretor():
+    cursor.execute('''SELECT corretor_creci, idImovel
+                        FROM imovel
+                        ORDER BY corretor_creci''')
+
     resultados = cursor.fetchall()
     imprimir_resultados(resultados)
 
@@ -250,13 +303,13 @@ def corretor_maior_rendimento_2022():
 
 
 def todos_imoveis():
-    cursor.execute('''SELECT * 
+    cursor.execute('''SELECT idImovel, endereco 
                     FROM imovel''')
     resultados = cursor.fetchall()
     imprimir_resultados(resultados)
 
 def imoveis_alugados():
-    cursor.execute('''SELECT *  
+    cursor.execute('''SELECT idImovel, endereco   
                         FROM imovel 
                         WHERE idImovel 
                         IN (SELECT imovel_id 
@@ -265,7 +318,7 @@ def imoveis_alugados():
     imprimir_resultados(resultados)
 
 def imoveis_nao_alugados():
-    cursor.execute('''SELECT *  
+    cursor.execute('''SELECT idImovel, endereco, aluguel 
                         FROM imovel 
                         WHERE idImovel 
                         NOT IN (SELECT imovel_id 
@@ -274,8 +327,11 @@ def imoveis_nao_alugados():
     imprimir_resultados(resultados)
 
 def imprimir_resultados(resultados):
+    
+    print("\n----------------------------")
     for linha in resultados:
         print(" | ".join(f"{str(valor):<20}" for valor in linha))
+    print("---------------------------\n")
 
     
 def menu_confirmacao():
@@ -297,9 +353,14 @@ def menu_inicial():
     print("|[3] Propostas por imóvel   |")
     print("|[4] Imóveis Cadastrados    |")
     print("|[5] Cliente Com Propostas  |")
-    print("|[6] Atualizar              |")
-    print("|[7] Remover                |")
-    print("|[8] Cadastrar              |")
+    print("|[6] Fiadores de Inquilino  |")
+    print("|[7] Corretores Responsaveis|")
+    print("|[8] Imoveis de um Cliente  |")
+    print("|[9] Propostas a Vencer     |")
+    print("+---------------------------+")
+    print("|[10] Atualizar             |")
+    print("|[11] Remover               |")
+    print("|[12] Cadastrar             |")
     print("+---------------------------+")
     print("|[0] Sair                   |")
     print("+---------------------------+")
@@ -408,17 +469,11 @@ def listar_imoveis():
 
         match opcao:
             case 1:
-                print("\n----------------------------") 
-                todos_imoveis()
-                print("----------------------------\n")   
+                todos_imoveis() 
             case 2:
-                print("\n----------------------------") 
-                imoveis_alugados()
-                print("----------------------------\n") 
+                imoveis_alugados() 
             case 3:
-                print("\n----------------------------\n") 
-                imoveis_nao_alugados()
-                print("----------------------------\n") 
+                imoveis_nao_alugados() 
             case 0:
                 break
             case _:
@@ -434,17 +489,11 @@ def atualizar():
 
         match opcao:
             case 1:
-                print("\n----------------------------")
-                atualizar_corretor()
-                print("----------------------------\n")    
+                atualizar_corretor()   
             case 2:
-                print("\n----------------------------")
                 atualizar_cliente()
-                print("----------------------------\n") 
             case 3:
-                print("\n----------------------------")
                 atualizar_imovel()
-                print("----------------------------\n") 
             case 0:
                 break
             case _:
@@ -458,17 +507,11 @@ def cadastrar():
 
         match opcao:
             case 1:
-                print("\n----------------------------")
-                cadastrar_corretor()
-                print("----------------------------\n")    
+                cadastrar_corretor()   
             case 2:
-                print("\n----------------------------")
-                cadastrar_cliente()
-                print("----------------------------\n") 
+                cadastrar_cliente() 
             case 3:
-                print("\n----------------------------")
                 cadastrar_imovel()
-                print("----------------------------\n") 
             case 0:
                 break
             case _:
@@ -482,50 +525,45 @@ def remover():
 
         match opcao:
             case 1:
-                print("\n----------------------------")
-                deletar_corretor()
-                print("----------------------------\n")    
+                deletar_corretor()  
             case 2:
-                print("\n----------------------------")
                 deletar_cliente()
-                print("----------------------------\n") 
             case 3:
-                print("\n----------------------------")
                 deletar_imovel()
-                print("----------------------------\n") 
             case 0:
                 break
             case _:
                 print("OPÇÃO INVALIDA")          
 
+#main
 while (1):
     menu_inicial()
     opcao = int(input(": "))
 
     match opcao:
         case 1:
-            print("\n----------------------------")
             corretor_maior_rendimento_2022()
-            print("----------------------------\n") 
         case 2:
-            print("\n----------------------------")
-            listar_imoveis_mais_caros()
-            print("----------------------------\n")            
+            listar_imoveis_mais_caros()            
         case 3:
-            print("\n----------------------------")
-            listar_propostas_por_imovel()
-            print("----------------------------\n")             
+            listar_propostas_por_imovel()             
         case 4:
             listar_imoveis()
         case 5:
-            print("\n----------------------------")
-            listar_todos_clientes_com_proposta()
-            print("----------------------------\n") 
+            listar_todos_clientes_com_proposta() 
         case 6:
-            atualizar()
+            listar_fiadores_inquilino()
         case 7:
-            remover()
+            listar_imoveis_corretor()
         case 8:
+            listar_imovel_proprietario()
+        case 9:
+            propostas_vencendo()
+        case 10:
+            atualizar()
+        case 11:
+            remover()
+        case 12:
             cadastrar()
         case 0:
             conn.close()
