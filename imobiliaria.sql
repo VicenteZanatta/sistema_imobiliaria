@@ -179,7 +179,6 @@ INSERT INTO fiador (cpf, nome, saldo, tel, inquilino_cpf) VALUES
 (33344455566, 'Ana Paula Silva', 18000.00, '(71) 987654321', 77788899900),
 (45667744556, 'Jorge Almeida', 22000.00, '(81) 923456789', 88899900011),
 (66755678875, 'Maria Eduarda Santos', 25000.00, '(91) 956789012', 88899900011); 
-(22233344455, 'Lucas Mendes', 15000.00, '(61) 912345678', 77788899900), -- Segundo fiador para inquilino 77788899900
 (33344455566, 'Ana Paula Silva', 18000.00, '(71) 987654321', 77788899900), -- Terceiro fiador para inquilino 77788899900
 (45667744556, 'Jorge Almeida', 22000.00, '(81) 923456789', 88899900011), -- Segundo fiador para inquilino 88899900011
 (66755678875, 'Maria Eduarda Santos', 25000.00, '(91) 956789012', 88899900011); -- Terceiro fiador para inquilino 88899900011
@@ -203,7 +202,7 @@ INSERT INTO visita (data, cliente_cpf, corretor_creci) VALUES
 ('2023-02-15 15:00:00', 88899900011, 44556677);
 
 -- Inserir mais contratos
-INSERT INTO contrato (proprietario_cpf, inquilino_cpf, imovel_id, valor, validade) VALUES
-(44455566677, 77788899900, 3, 1900, '2024-02-15'),
-(55566677788, 88899900011, 4, 3900, '2024-02-20');
+INSERT INTO contrato (proprietario_cpf, inquilino_cpf, imovel_id, valor, inicio, fim) VALUES
+(44455566677, 77788899900, 3, 1900, '2022-02-15','2024-02-15'),
+(55566677788, 88899900011, 4, 3900, '2022-02-20, '2024-02-20');
 
